@@ -1,0 +1,6 @@
+# 'tf fmt' -check. Fail if engineer has checked in code that has been formatted;
+# 'tf validate' to ensure code checked in is valid;
+# 'tf plan' and redirect plan to file
+# create an artifact that can be gzipped and ready for CD pipeline.
+
+#I've already implemented these patterns in previous projects, so happy to share if interested.

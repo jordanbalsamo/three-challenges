@@ -1,0 +1,11 @@
+# directories
+**/.terraform/**
+**/.venv
+**/__pycache__
+
+
+# files
+.DS_Store
+*.pyc
+*.tfstate
+*.tfstate.*

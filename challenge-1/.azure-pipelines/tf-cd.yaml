@@ -1,0 +1,5 @@
+# take artifact from tf-ci.yaml;
+# await approval gate (depending on env);
+# tf apply infra.
+
+#I've already implemented these patterns in previous projects, so happy to share if interested.
