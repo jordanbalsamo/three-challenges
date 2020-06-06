@@ -35,10 +35,8 @@ Please authenticate to your preferred cloud provider, prior to running this scri
 
 This script can be run by issuing the following command to a bash-friendly terminal:
 
-```./query-metadata.sh```
+```./query-vm-metadata.sh```
 
 ## Notes
 
 Due to time restrictions, I've mocked the JSON output, but all CLI commands should yield JSON output metadata for a given VM identifier.
-
-If you don't already have the jq binary installed, go to [jq](https://stedolan.github.io/jq/) to get it running. It is only used for demo purposes in this instance.

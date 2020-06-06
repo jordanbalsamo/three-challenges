@@ -41,7 +41,7 @@ source .venv/bin/activate
 There is only one non-standard library module in use here, which can be installed in your venv by running:
 ```
 pip install -r requirements.txt
-OR
+\- OR -
 pip install ddt
 ```
 
@@ -56,7 +56,7 @@ tests.py: contains tests using unittest and ddt.
 You can invoke both flatten.py and tests.py by simply running:
 ```
 python3 flatten.py
-OR
+\- OR -
 python3 tests.py
 ```
 
