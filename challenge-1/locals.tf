@@ -8,4 +8,13 @@ locals {
     project_name = var.project_name
     environment  = var.environment
   }
+
+  backend_address_pool_name      = "${azurerm_virtual_network.ttc_vnet.name}-beap"
+  frontend_port_name             = "${azurerm_virtual_network.ttc_vnet.name}-feport"
+  frontend_ip_configuration_name = "${azurerm_virtual_network.ttc_vnet.name}-feip"
+  http_setting_name              = "${azurerm_virtual_network.ttc_vnet.name}-be-htst"
+  listener_name                  = "${azurerm_virtual_network.ttc_vnet.name}-httplstn"
+  request_routing_rule_name      = "${azurerm_virtual_network.ttc_vnet.name}-rqrt"
+  redirect_configuration_name    = "${azurerm_virtual_network.ttc_vnet.name}-rdrcfg"
+
 }

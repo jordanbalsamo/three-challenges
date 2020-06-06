@@ -13,7 +13,7 @@ resource "random_password" "sql_server_admin_password" {
 /*
 resource "azurerm_key_vault_secret" "sql_server_admin_password" {
   provider = azurerm.kv
-  name     = "${local.project_name}-sqlserver-${var.environment}-administrator-password"
+  name     = "${var.project_name}-sqlserver-${var.environment}-administrator-password"
   value    = random_password.sql_server_admin_password
 }
 */

@@ -1,2 +1,3 @@
-# prod tfvars placeholder
-environment = "prod"
+environment                    = "prod"
+project_name                   = "ttc" # ttc = three tier challenge
+sql_server_administrator_login = "ttc-sa"
