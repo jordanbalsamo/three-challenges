@@ -1,42 +1,35 @@
 # VNET
 resource "azurerm_virtual_network" "ttc_vnet" {
-  name                = "${local.project_name}-vnet-${var.environment}"
+  name                = "${var.project_name}-vnet-${var.environment}"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.ttc_rg.name
   # dns_servers         = ["168.63.129.16"] 
+
+  tags = local.default_tags
 }
 
 # Application Gateway Subnet
 resource "azurerm_subnet" "ttc_agw_subnet" {
-  name                 = "${local.project_name}-agw-subnet-${var.environment}"
+  name                 = "${var.project_name}-agw-subnet-${var.environment}"
   resource_group_name  = azurerm_resource_group.ttc_rg.name
   virtual_network_name = azurerm_virtual_network.ttc_vnet.name
-  address_prefixes       = ["10.0.1.0/24"]
+  address_prefixes     = ["10.0.1.0/24"]
   service_endpoints    = ["Microsoft.Storage"]
 }
 
 # Public IP address
 resource "azurerm_public_ip" "ttc_pip" {
-  name                = "${local.project_name}-pip-${var.environment}"
+  name                = "${var.project_name}-pip-${var.environment}"
   resource_group_name = azurerm_resource_group.ttc_rg.name
   location            = var.location
   allocation_method   = "Dynamic"
-}
 
-# since these variables are re-used - a locals block makes this more maintainable
-locals {
-  backend_address_pool_name      = "${azurerm_virtual_network.ttc_vnet.name}-beap"
-  frontend_port_name             = "${azurerm_virtual_network.ttc_vnet.name}-feport"
-  frontend_ip_configuration_name = "${azurerm_virtual_network.ttc_vnet.name}-feip"
-  http_setting_name              = "${azurerm_virtual_network.ttc_vnet.name}-be-htst"
-  listener_name                  = "${azurerm_virtual_network.ttc_vnet.name}-httplstn"
-  request_routing_rule_name      = "${azurerm_virtual_network.ttc_vnet.name}-rqrt"
-  redirect_configuration_name    = "${azurerm_virtual_network.ttc_vnet.name}-rdrcfg"
+  tags = local.default_tags
 }
 
 resource "azurerm_application_gateway" "ttc_agw" {
-  name                = "${local.project_name}-agw-${var.environment}"
+  name                = "${var.project_name}-agw-${var.environment}"
   resource_group_name = azurerm_resource_group.ttc_rg.name
   location            = var.location
 
@@ -47,7 +40,7 @@ resource "azurerm_application_gateway" "ttc_agw" {
   }
 
   gateway_ip_configuration {
-    name      = "${local.project_name}-ip-config-${var.environment}"
+    name      = "${var.project_name}-ip-config-${var.environment}"
     subnet_id = azurerm_subnet.ttc_agw_subnet.id
   }
 
@@ -89,4 +82,6 @@ resource "azurerm_application_gateway" "ttc_agw" {
     backend_address_pool_name  = local.backend_address_pool_name
     backend_http_settings_name = local.http_setting_name
   }
+
+  tags = local.default_tags
 }

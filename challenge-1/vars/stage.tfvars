@@ -1,2 +1,2 @@
 # stage tfvars placeholder
-environment             = "stage"
+environment = "stage"

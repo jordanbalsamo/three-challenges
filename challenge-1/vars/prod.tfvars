@@ -1,2 +1,2 @@
 # prod tfvars placeholder
-environment             =  "prod"
+environment = "prod"

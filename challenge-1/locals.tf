@@ -1,7 +1,11 @@
 # fixed vars that will be reused frequently
 locals {
-  # tagging strategy for resource management and cost tracking
-  managed_by   = "Terraform"
-  ops_owner    = "DevOps"
-  project_name = "ttc" # ttc = three tier challenge
+
+  #default tags. can use the merge() function on resource to add arbitrary additional tags
+  default_tags = {
+    managed_by   = "Terraform"
+    owner        = "DevOps"
+    project_name = var.project_name
+    environment  = var.environment
+  }
 }

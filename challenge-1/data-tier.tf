@@ -1,3 +1,4 @@
+# generate a random sql admin password
 resource "random_password" "sql_server_admin_password" {
   provider         = random.random
   length           = 32
@@ -18,7 +19,7 @@ resource "azurerm_key_vault_secret" "sql_server_admin_password" {
 */
 
 resource "azurerm_sql_server" "primary_server" {
-  name                         = "${local.project_name}-sqlserver-${var.environment}"
+  name                         = "${var.project_name}-sqlserver-${var.environment}"
   resource_group_name          = azurerm_resource_group.ttc_rg.name
   location                     = var.location
   version                      = var.sql_server_version
@@ -31,32 +32,21 @@ resource "azurerm_sql_server" "primary_server" {
     retention_in_days          = 365
   }
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-    failover     = "primary"
-  }
+  tags = merge(local.default_tags, { "failover" = "failover" })
 }
 
 resource "azurerm_storage_account" "sql_audit_logs" {
-  name                     = "${local.project_name}sa${var.environment}"
+  name                     = "${var.project_name}sa${var.environment}"
   resource_group_name      = azurerm_resource_group.ttc_rg.name
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-  }
+  tags = local.default_tags
 }
 
 resource "azurerm_sql_database" "primary_db" {
-  name                = "${local.project_name}-sqldb-${var.environment}"
+  name                = "${var.project_name}-sqldb-${var.environment}"
   resource_group_name = azurerm_resource_group.ttc_rg.name
   location            = var.location
   server_name         = azurerm_sql_server.primary_server.name
@@ -68,18 +58,12 @@ resource "azurerm_sql_database" "primary_db" {
     retention_in_days          = 365
   }
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-    failover     = "primary"
-  }
+  tags = merge(local.default_tags, { "failover" = "primary" })
 }
 
 resource "azurerm_sql_server" "failover_server" {
   count                        = var.environment == "prod" ? 1 : 0
-  name                         = "${local.project_name}-sqlserver-replica-${var.environment}"
+  name                         = "${var.project_name}-sqlserver-replica-${var.environment}"
   resource_group_name          = azurerm_resource_group.ttc_rg.name
   location                     = var.failover_location
   version                      = var.sql_server_version
@@ -92,20 +76,14 @@ resource "azurerm_sql_server" "failover_server" {
     retention_in_days          = 365
   }
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-    failover     = "failover"
-  }
+  tags = merge(local.default_tags, { "failover" = "failover" })
 
   depends_on = [azurerm_sql_server.primary_server]
 }
 
 resource "azurerm_sql_database" "failover_db" {
   count               = var.environment == "prod" ? 1 : 0
-  name                = "${local.project_name}-sqldb-replica-${var.environment}"
+  name                = "${var.project_name}-sqldb-replica-${var.environment}"
   create_mode         = "OnlineSecondary"
   source_database_id  = azurerm_sql_database.primary_db.id
   resource_group_name = azurerm_resource_group.ttc_rg.name
@@ -113,20 +91,14 @@ resource "azurerm_sql_database" "failover_db" {
   server_name         = azurerm_sql_server.primary_server.name
   edition             = var.sql_db_edition
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-    failover     = "failover"
-  }
+  tags = merge(local.default_tags, { "failover" = "failover" })
 
   depends_on = [azurerm_sql_server.primary_server, azurerm_sql_database.primary_db]
 }
 
 resource "azurerm_sql_failover_group" "failover_group" {
   count               = var.environment == "prod" ? 1 : 0
-  name                = "${local.project_name}-fg-${var.environment}"
+  name                = "${var.project_name}-fg-${var.environment}"
   resource_group_name = azurerm_resource_group.ttc_rg.name
   server_name         = azurerm_sql_server.primary_server.name
   databases           = [azurerm_sql_database.primary_db.id]
@@ -142,4 +114,6 @@ resource "azurerm_sql_failover_group" "failover_group" {
   readonly_endpoint_failover_policy {
     mode = "Disabled"
   }
+
+  tags = merge(local.default_tags, { "failover" = "failover" })
 }

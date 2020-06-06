@@ -1,10 +1,12 @@
 resource "azurerm_resource_group" "ttc_rg" {
-  name     = "${local.project_name}-rg-${var.environment}"
+  name     = "${var.project_name}-rg-${var.environment}"
   location = "UK South"
+
+  tags = local.default_tags
 }
 
 resource "azurerm_storage_account" "static_site_sa" {
-  name                     = "${local.project_name}staticsitesa${var.environment}"
+  name                     = "${var.project_name}staticsitesa${var.environment}"
   resource_group_name      = azurerm_resource_group.ttc_rg.name
   location                 = var.location
   account_tier             = "Standard"
@@ -16,12 +18,7 @@ resource "azurerm_storage_account" "static_site_sa" {
     error_404_document = "404.html"
   }
 
-  tags = {
-    managed_by   = local.managed_by
-    owner        = local.ops_owner
-    project_name = local.project_name
-    environment  = var.environment
-  }
+  tags = local.default_tags
 }
 
 resource "azurerm_storage_blob" "static_site_index_blob" {
