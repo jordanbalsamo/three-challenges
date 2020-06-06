@@ -1,2 +1,0 @@
-# I'd normally want to modularise anything that is repeatable or, like the primary / secondary SQL Server instances.
-# If I had extra time, I'd either have referenced another repo with a standard implementation of the SQL Server instance or have created my own module here and referenced it in the data tier.
