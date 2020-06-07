@@ -1,7 +1,7 @@
 #Default provider
 provider "azurerm" {
   version         = "=v2.13.0"
-  subscription_id = "" # add your own sub ID here
+  subscription_id = var.subscription_id
   features {}
 
 }
@@ -10,7 +10,7 @@ provider "azurerm" {
 provider "azurerm" {
   alias           = "core"
   version         = "=v2.13.0"
-  subscription_id = "" # add your own sub ID here
+  subscription_id = var.subscription_id
   features {}
 
 }
@@ -20,7 +20,7 @@ provider "azurerm" {
 provider "azurerm" {
   alias           = "kv"
   version         = "=v2.13.0"
-  subscription_id = "" # add your own sub ID here
+  subscription_id = var.subscription_id
   features        = {}
 }
 */

@@ -9,3 +9,5 @@
 *.pyc
 *.tfstate
 *.tfstate.*
+*.pfx
+*.pem
