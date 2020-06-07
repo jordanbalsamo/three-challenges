@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "static_site_sa" {
   account_tier             = "Standard"
   account_kind             = "StorageV2"
   account_replication_type = "GRS"
-  access_tier = "Hot"
+  access_tier              = "Hot"
 
   static_website {
     index_document     = "index.html"
@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "static_site_sa" {
 
   # https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security
   network_rules {
-    default_action = "Allow"
+    default_action             = "Allow"
     virtual_network_subnet_ids = [azurerm_subnet.ttc_agw_subnet.id]
   }
 
