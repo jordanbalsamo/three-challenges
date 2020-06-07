@@ -17,7 +17,7 @@ Initial thoughts are produce an architecture diagram to guide implementation. Wa
 
 ### Web tier: either static site hosted in a Storage Account OR a Web App.
 
-  App gateway to enable custom domain for static site hosted on Azure Storage Account, SSL offloading, redirecting HTTP traffic to HTTPS (this could also be achieved with Azure CDN/DNS Zones).
+  App gateway to enable custom domain for static site hosted on Azure Storage Account, SSL offloading, redirecting HTTP traffic to HTTPS and built-in WAF to increase security posture.
 
   Azure Storage Accounts now allow static websites to be hosted as blobs. A lot of modern web applications are moving toward the Single-Page Application (SPA) paradigm, where most of the rendering is done via the browser, which means a smoother experience for the user and lower infra requirements. Static content (html, js, css) can be served from the storage account, which means cheaper run costs.
 
@@ -30,6 +30,8 @@ Initial thoughts are produce an architecture diagram to guide implementation. Wa
 ### Data tier: Azure SQL.
 
   Azure SQL PaaS will provide the basis for the data tier. Cheap and efficient means of storing structured data. Basic SKU's cost <£5 monthly. PaaS offering also eliminates the challenge of patching / maintenance.
+
+  For this MVP there will be a firewall that is open to trusted Azure services (to enable Function to interact with data tier). Though - in recognition that this isn't the strongest from a security perspective - there is an upgrade path to place the SQL Server instances in their own subnet and enable service endpoints for the Azure function.
 
 ## How to run
 
